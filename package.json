@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vue/language-plugin-pug": "^2.1.4",
     "pug": "^3.0.3",
     "vue": "^3.4.29",
     "vuex": "^4.1.0"

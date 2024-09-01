@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import { toRaw } from "vue";
 
 const store = createStore({
   strict: false,
@@ -94,8 +95,59 @@ const store = createStore({
         return state.isUserItemsReached;
     },
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    SET_SELECTED_ITEM(state, payload) {
+      state.selectedItem = payload;
+      payload = null;
+    },
+    SET_SIBU(state, payload) {
+      const { selectedItemsByUser } = state;
+      const updatedArr = [payload, ...toRaw(selectedItemsByUser)];
+      state.selectedItemsByUser = updatedArr;
+
+      if (state.selectedItemsByUser.length === 6) {
+        state.isUserItemsReached = true;
+      }
+
+      payload = null;
+    },
+    UPDATE_SIBU(state, payload) {
+      state.selectedItemsByUser = payload;
+
+      if (state.isUserItemsReached) {
+        state.isUserItemsReached = false;
+      }
+
+      payload = null;
+    },
+  },
+  actions: {
+    updateSelectedItem({ commit }, payload) {
+      const { param } = payload;
+      commit("SET_SELECTED_ITEM", param);
+    },
+    updateItemForSelect({ commit, state }, payload) {
+      if (state.selectedItemsByUser.length === 6) {
+        return;
+      }
+
+      const { param, ptype } = payload;
+      commit("SET_SIBU", param);
+    },
+    deleteUserCardAct({ commit, state }, payload) {
+      const { selectedItemsByUser } = state;
+      const id = payload?.param?.id;
+
+      for (let i = 0; i < selectedItemsByUser.length; i++) {
+        if (selectedItemsByUser[i].id === id) {
+          selectedItemsByUser.splice(i, 1);
+          break;
+        }
+      }
+
+      commit("UPDATE_SIBU", selectedItemsByUser);
+    },
+  },
 });
 
 export default store;

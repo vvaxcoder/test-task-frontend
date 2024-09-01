@@ -27,5 +27,9 @@ const getItemsForSelect = store.getters.getItemsForSelect;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media screen and (max-width: 1190px) {
+    flex-direction: column;
+  }
 }
 </style>

@@ -6,12 +6,13 @@
 
 <script setup>
 import { useStore } from "vuex";
+import { computed, ref, toRaw } from "vue";
 
 const store = useStore();
-const getSelectedItem = store.getters.getSelectedItem;
-const len = Object.keys(getSelectedItem).length;
+const getSelectedItem = ref(computed(() => store.getters.getSelectedItem));
+const len = ref(computed(() => Object.keys(store.getters.getSelectedItem).length));
 const emptyTitle = "Item not selected";
-const selectedItem = getSelectedItem?.name || "";
+const selectedItem = ref(computed(() => store.getters.getSelectedItem?.name));
 </script>
 
 <style lang="scss" scoped>
